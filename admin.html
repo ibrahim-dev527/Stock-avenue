@@ -621,9 +621,32 @@
    asks the database to do things; the database decides whether
    a signed-out visitor is allowed to, and the answer is no.
    ============================================================ */
-const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = "https://yvnjufzhbonmhdaokdrz.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2bmp1ZnpoYm9ubWhkYW9rZHJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMDMwOTMsImV4cCI6MjEwNTg3OTA5M30.HTM7aQL3LQT1i0d0bt0syBOHJaTcyzg16YBGUqAAkWQ";
+const sb = (function(){
+  try{
+    return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }catch(e){
+    console.error("Supabase could not be started — check SUPABASE_URL and SUPABASE_ANON_KEY in this file:", e.message);
+    const offlineError = { message: "Store is not connected yet." };
+    const offlineQuery = {
+      select(){ return this; }, eq(){ return this; }, order(){ return Promise.resolve({ data: [], error: offlineError }); },
+      insert(){ return Promise.resolve({ data: null, error: offlineError }); },
+      update(){ return Promise.resolve({ data: null, error: offlineError }); },
+      delete(){ return Promise.resolve({ data: null, error: offlineError }); }
+    };
+    return {
+      from(){ return offlineQuery; },
+      auth: {
+        getSession: async ()=>({ data:{ session:null } }),
+        signInWithPassword: async ()=>({ error: offlineError }),
+        signOut: async ()=>({}),
+        onAuthStateChange(){}
+      },
+      storage: { from(){ return { upload: async ()=>({ error: offlineError }), getPublicUrl(){ return { data:{ publicUrl:"" } }; } }; } }
+    };
+  }
+})();
 
 const FALLBACK_IMG = "https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&q=70&auto=format&fit=crop";
 const LOW_STOCK_THRESHOLD = 4;

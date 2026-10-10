@@ -102,3 +102,49 @@ these steps once, in order, and the whole site (and the admin page) will work.
   WhatsApp with the same details. You'll see every order (even ones a
   customer never followed up on WhatsApp) in the new **Orders** tab in
   admin.html, where you can mark them Confirmed, Completed or Cancelled.
+
+## Deploying to stockavenuegh.com
+
+1. Upload **every file and folder** to the root of your hosting (the same
+   level, not inside a subfolder) — that means all the `.html` files,
+   `manifest.json`, `sw.js`, `robots.txt`, `sitemap.xml`, and the whole
+   `icons/` folder together. The `backend/` folder is for you only — it
+   doesn't need to go on the live server.
+2. Make sure `index.html` is set as your site's default/home page in
+   Stormerhost's hosting settings (sometimes called "index file" or
+   "default document").
+3. **HTTPS is required.** Both the "Install app" feature and the service
+   worker only work over `https://` (never plain `http://`). Stormerhost
+   should issue a free SSL certificate for the domain automatically — if
+   `https://stockavenuegh.com` doesn't load with a padlock in the browser,
+   contact their support to enable it before showing the client.
+4. Once live, submit `https://stockavenuegh.com/sitemap.xml` in Google
+   Search Console (Search Console → Sitemaps) so Google starts indexing the
+   site faster.
+
+## SEO additions in this version
+
+- Every page now has a canonical URL, Open Graph tags, and a Twitter card
+  pointing at `stockavenuegh.com`, plus `robots.txt` and `sitemap.xml`.
+- Structured data (`ClothingStore` schema) is embedded on every page so
+  Google can show your address, phone number and Instagram directly in
+  search results.
+- `admin.html` is excluded from search engines via `robots.txt` and a
+  `noindex` tag, so it never shows up in Google.
+
+## Installing as a mobile app
+
+- The site is now an installable PWA (Progressive Web App). On Android/
+  Chrome, a small "Install Stock Avenue Ghana" card appears automatically
+  a couple of seconds after a visitor lands on the site (only if the
+  browser considers it installable, which requires HTTPS — see above).
+  Tapping **Install** adds it to their home screen like a real app.
+- On iPhone, Safari doesn't support that automatic prompt, so visitors
+  instead see a card telling them to tap **Share → Add to Home Screen**.
+- Once someone dismisses the card (or installs), it won't show again on
+  that device.
+- The app icon is the "S" mark already used for the favicon, generated at
+  the sizes each platform needs (`icons/icon-192.png`, `icons/icon-512.png`,
+  a maskable version for Android's adaptive icons, and an Apple touch icon).
+- This install feature is on the 6 shopper-facing pages only — `admin.html`
+  stays a normal secured page, not something intended to be "installed".
