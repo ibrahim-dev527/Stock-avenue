@@ -14,8 +14,12 @@
 <link rel="canonical" href="https://stockavenuegh.com/index.html">
 <meta property="og:url" content="https://stockavenuegh.com/index.html">
 <meta name="theme-color" content="#16181c">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stock Avenue">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -31,7 +35,7 @@
     "addressLocality": "Accra",
     "addressCountry": "GH"
   },
-  "sameAs": ["https://www.instagram.com/Stock_Avenue.gh/"]
+  "sameAs": ["https://www.instagram.com/stockavenue.gh/"]
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -385,10 +389,23 @@
   .logo-stacked .logo-l1{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--text);}
   .logo-stacked .logo-l2{font-family:var(--font-display);font-size:17px;font-style:italic;font-weight:400;color:var(--cyan-deep);}
   .logo-stacked .logo-l3{font-family:var(--font-body);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-top:1px;font-weight:600;}
+
+  /* ---------- Site-wide announcement bar ---------- */
+  .announce-bar{background:var(--pink);color:#fff;text-align:center;font-size:13.5px;font-weight:600;
+    padding:10px 44px 10px 16px;position:relative;display:none;}
+  .announce-bar.show{display:block;}
+  .announce-close{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;
+    color:#fff;font-size:13px;width:26px;height:26px;border-radius:50%;}
+  .announce-close:hover{background:rgba(255,255,255,.18);}
 </style>
+
 </head>
 <body>
 
+<div class="announce-bar" id="announceBar">
+  <span id="announceText"></span>
+  <button class="announce-close" id="announceCloseBtn" aria-label="Dismiss">✕</button>
+</div>
 <header class="site-header">
   <div class="wrap nav-row">
     <a href="index.html" class="logo logo-stacked">
@@ -404,7 +421,7 @@
       <a href="contact.html">Contact</a>
     </nav>
     <div class="nav-tools">
-      <a class="icon-btn" href="https://www.instagram.com/Stock_Avenue.gh/" target="_blank" rel="noopener" aria-label="Instagram">
+      <a class="icon-btn" id="headerInstaLink" href="https://www.instagram.com/stockavenue.gh/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
       </a>
       <button class="icon-btn" id="searchToggle" aria-label="Search">
@@ -431,7 +448,7 @@
     <a href="about.html">About Us</a>
     <a href="contact.html">Contact</a>
     <div class="mm-social">
-      <a class="icon-btn" style="border:1px solid var(--border);" href="https://www.instagram.com/Stock_Avenue.gh/" target="_blank" rel="noopener" aria-label="Instagram">
+      <a class="icon-btn" id="mobileInstaLink" style="border:1px solid var(--border);" href="https://www.instagram.com/stockavenue.gh/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
       </a>
     </div>
@@ -575,9 +592,9 @@
     <div class="section-head">
       <div>
         <h2>Follow the Avenue</h2>
-        <p class="sub">@Stock_Avenue.gh — discover new arrivals, style inspiration and updates from Stock Avenue Ghana.</p>
+        <p class="sub"><span id="homeInstaHandle">@stockavenue.gh</span> — discover new arrivals, style inspiration and updates from Stock Avenue Ghana.</p>
       </div>
-      <a href="https://www.instagram.com/Stock_Avenue.gh/" target="_blank" rel="noopener" class="link-more">Follow Us on Instagram</a>
+      <a id="homeInstaFollowBtn" href="https://www.instagram.com/stockavenue.gh/" target="_blank" rel="noopener" class="link-more">Follow Us on Instagram</a>
     </div>
     <div class="insta-grid">
       <div class="insta-tile"><img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=70&auto=format&fit=crop" alt="Instagram post"></div>
@@ -596,7 +613,7 @@
     <h2>Your next favourite look is waiting.</h2>
     <p>Visit Stock Avenue at La-Bawaleshi Road, Accra, or contact us to discover our latest collection.</p>
     <div class="cta-actions">
-      <a href="https://www.google.com/maps/search/?api=1&query=3+La-Bawaleshi+Road,+Accra,+Ghana" target="_blank" rel="noopener" class="btn btn-primary" style="background:var(--charcoal);">Get Directions</a>
+      <a id="ctaDirectionsBtn" href="https://www.google.com/maps/search/?api=1&query=3+La-Bawaleshi+Road,+Accra,+Ghana" target="_blank" rel="noopener" class="btn btn-primary" style="background:var(--charcoal);">Get Directions</a>
       <a href="contact.html" class="btn btn-outline-white">Contact Us</a>
     </div>
   </div>
@@ -609,7 +626,7 @@
         <a href="index.html" class="logo">Stock Avenue <span>Ghana</span></a>
         <p>Unisex Fashion. Everyday Style. Everything You Need.</p>
         <div class="footer-social">
-          <a href="https://www.instagram.com/Stock_Avenue.gh/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a id="footerInstaLink" href="https://www.instagram.com/stockavenue.gh/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
           <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M15 8h2V4h-2a4 4 0 0 0-4 4v2H9v4h2v6h4v-6h2.5l.5-4H15V8z"/></svg></a>
           <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v10.5a3 3 0 1 1-2.2-2.9"/><path d="M14 3c.3 2.5 2 4.3 4.5 4.6"/></svg></a>
           <a href="#" aria-label="X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
@@ -639,9 +656,9 @@
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="tel:0544862778">0544 862 778</a></li>
-          <li><a href="tel:0206763412">0206 763 412</a></li>
-          <li><a href="https://www.google.com/maps/search/?api=1&query=3+La-Bawaleshi+Road,+Accra,+Ghana" target="_blank" rel="noopener">3 La-Bawaleshi Road, Accra, Ghana</a></li>
+          <li><a id="footerPhoneMain" href="tel:0544862778">0544 862 778</a></li>
+          <li><a id="footerPhoneAlt" href="tel:0206763412">0206 763 412</a></li>
+          <li><a id="footerAddressLink" href="https://www.google.com/maps/search/?api=1&query=3+La-Bawaleshi+Road,+Accra,+Ghana" target="_blank" rel="noopener">3 La-Bawaleshi Road, Accra, Ghana</a></li>
         </ul>
       </div>
     </div>
@@ -715,7 +732,7 @@
 <!-- ============ PWA INSTALL BANNER (shared) ============ -->
 <div class="install-banner" id="installBanner" style="position:relative;">
   <button class="install-close" id="installCloseBtn" aria-label="Dismiss">✕</button>
-  <img src="icons/icon-192.png" alt="Stock Avenue Ghana app icon">
+  <img src="/icons/icon-192.png" alt="Stock Avenue Ghana app icon">
   <div class="ib-body">
     <h4 id="installTitle">Install Stock Avenue Ghana</h4>
     <p id="installText">Add the app to your home screen for quick access and a faster shop.</p>
@@ -780,7 +797,94 @@ const sb = (function(){
   }
 })();
 
-const WHATSAPP_NUMBER = "233544882778";
+let WHATSAPP_NUMBER = "233544882778";
+
+/* ---------- Store settings: live phone/address/Instagram/WhatsApp + announcement ---------- */
+let STORE_SETTINGS = null;
+async function loadSettings(){
+  if(STORE_SETTINGS) return STORE_SETTINGS;
+  try{
+    const { data, error } = await sb.from("store_settings").select("*").eq("id", 1).order("id", { ascending:true });
+    if(error || !data || !data[0]) return null;
+    STORE_SETTINGS = data[0];
+    applySettings(STORE_SETTINGS);
+    return STORE_SETTINGS;
+  }catch(e){
+    console.error("Could not load store settings:", e.message);
+    return null;
+  }
+}
+function applySettings(s){
+  if(s.whatsapp_number){ WHATSAPP_NUMBER = s.whatsapp_number; }
+
+  const waFloat = document.getElementById("whatsappFloat");
+  if(waFloat){ waFloat.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Stock Avenue Ghana, I have a question.")}`; }
+  const waBtn = document.getElementById("contactWhatsappBtn");
+  if(waBtn){ waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}`; }
+
+  if(s.instagram_handle){
+    const igUrl = `https://www.instagram.com/${s.instagram_handle}/`;
+    ["headerInstaLink","mobileInstaLink","footerInstaLink","homeInstaFollowBtn","contactInstaBtn"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.href = igUrl;
+    });
+    const igLinkWithText = document.getElementById("contactInstaLink");
+    if(igLinkWithText){ igLinkWithText.href = igUrl; igLinkWithText.textContent = "@" + s.instagram_handle; }
+    const igHandleSpan = document.getElementById("homeInstaHandle");
+    if(igHandleSpan){ igHandleSpan.textContent = "@" + s.instagram_handle; }
+  }
+
+  if(s.phone_main){
+    const mainDigits = s.phone_main.replace(/\s+/g, "");
+    ["footerPhoneMain","contactPhoneMain"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){ el.textContent = s.phone_main; el.href = "tel:" + mainDigits; }
+    });
+    const callBtn = document.getElementById("contactCallBtn");
+    if(callBtn){ callBtn.href = "tel:" + mainDigits; }
+  }
+  if(s.phone_alt){
+    const altDigits = s.phone_alt.replace(/\s+/g, "");
+    ["footerPhoneAlt","contactPhoneAlt"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){ el.textContent = s.phone_alt; el.href = "tel:" + altDigits; }
+    });
+  }
+
+  if(s.address_line1 && s.address_line2){
+    const fullAddress = `${s.address_line1}, ${s.address_line2}`;
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+    const mapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&output=embed`;
+    const footerAddr = document.getElementById("footerAddressLink");
+    if(footerAddr){ footerAddr.textContent = fullAddress; footerAddr.href = mapsUrl; }
+    const contactAddr = document.getElementById("contactAddressText");
+    if(contactAddr){ contactAddr.innerHTML = `${s.address_line1},<br>${s.address_line2}`; }
+    const ctaDirections = document.getElementById("ctaDirectionsBtn");
+    if(ctaDirections){ ctaDirections.href = mapsUrl; }
+    const mapsBtn = document.getElementById("contactMapsBtn");
+    if(mapsBtn){ mapsBtn.href = mapsUrl; }
+    const mapIframe = document.getElementById("contactMapIframe");
+    if(mapIframe){ mapIframe.src = mapsEmbedUrl; }
+  }
+
+  const bar = document.getElementById("announceBar");
+  if(bar){
+    const dismissed = sessionStorage.getItem("stockAvenueAnnounceDismissed");
+    if(s.announcement_active && s.announcement_text && !dismissed){
+      document.getElementById("announceText").textContent = s.announcement_text;
+      bar.classList.add("show");
+    }
+  }
+}
+const announceCloseBtn = document.getElementById("announceCloseBtn");
+if(announceCloseBtn){
+  announceCloseBtn.addEventListener("click", ()=>{
+    sessionStorage.setItem("stockAvenueAnnounceDismissed", "1");
+    document.getElementById("announceBar").classList.remove("show");
+  });
+}
+loadSettings();
+
 const FALLBACK_IMG = "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&auto=format&fit=crop";
 const LOW_STOCK_THRESHOLD = 4;
 
@@ -1157,7 +1261,8 @@ updateWishlistBadge();
 
 /* ---------- PWA install prompt ---------- */
 (function(){
-  const KEY = "stockAvenueInstallDismissed";
+  const KEY = "stockAvenueInstallDismissedUntil";
+  const DISMISS_DAYS = 14;
   const banner = document.getElementById("installBanner");
   const titleEl = document.getElementById("installTitle");
   const textEl = document.getElementById("installText");
@@ -1165,29 +1270,33 @@ updateWishlistBadge();
   const dismissBtn = document.getElementById("installDismissBtn");
   const closeBtn = document.getElementById("installCloseBtn");
 
-  function dismissForGood(){
-    localStorage.setItem(KEY, "1");
+  function dismissFor14Days(){
+    localStorage.setItem(KEY, String(Date.now() + DISMISS_DAYS*24*60*60*1000));
     banner.classList.remove("show");
   }
-  dismissBtn.addEventListener("click", dismissForGood);
-  closeBtn.addEventListener("click", dismissForGood);
+  dismissBtn.addEventListener("click", dismissFor14Days);
+  closeBtn.addEventListener("click", dismissFor14Days);
   actionBtn.addEventListener("click", async () => {
     if(window.__deferredInstallPrompt){
       window.__deferredInstallPrompt.prompt();
       await window.__deferredInstallPrompt.userChoice;
       window.__deferredInstallPrompt = null;
     }
-    dismissForGood();
+    dismissFor14Days();
   });
 
-  if(localStorage.getItem(KEY)) return;
+  const dismissedUntil = Number(localStorage.getItem(KEY) || 0);
+  if(dismissedUntil && Date.now() < dismissedUntil) return;
 
-  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  const isStandalone = (typeof window.matchMedia === "function" && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
   if(isStandalone) return;
+
+  let promptHandled = false;
 
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     window.__deferredInstallPrompt = e;
+    promptHandled = true;
     titleEl.textContent = "Install Stock Avenue Ghana";
     textEl.textContent = "Add the app to your home screen for quick access and a faster shop.";
     actionBtn.style.display = "inline-flex";
@@ -1196,14 +1305,27 @@ updateWishlistBadge();
 
   const isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
   if(isIOS){
+    promptHandled = true;
     titleEl.textContent = "Add to Home Screen";
     textEl.textContent = 'Tap the Share icon in Safari, then "Add to Home Screen" to install this app.';
     actionBtn.style.display = "none";
     setTimeout(() => banner.classList.add("show"), 2500);
   }
 
+  // Universal fallback: if this browser never fires beforeinstallprompt and
+  // isn't iOS (e.g. desktop Safari, Firefox, or a Chrome build that simply
+  // hasn't decided yet), still tell the visitor how to install manually
+  // instead of silently showing nothing.
+  setTimeout(() => {
+    if(promptHandled || isStandalone) return;
+    titleEl.textContent = "Install this app";
+    textEl.textContent = "Look for an install icon in your browser's address bar, or open your browser's menu and choose \"Install app\" / \"Add to Home Screen\".";
+    actionBtn.style.display = "none";
+    banner.classList.add("show");
+  }, 4000);
+
   if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
+    navigator.serviceWorker.register("/sw.js").catch(()=>{});
   }
 })();
 
