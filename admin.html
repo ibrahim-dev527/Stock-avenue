@@ -346,8 +346,21 @@
   .admin-user button:hover{background:rgba(255,255,255,.12);}
   .admin-wrap{max-width:1180px;margin:0 auto;padding:36px 28px 80px;}
 
+  /* ---------- Animated background decor ---------- */
+  body{background:linear-gradient(160deg,#f6f4ef 0%,#f1f4f3 48%,#f6f0f1 100%);}
+  .admin-bg-decor{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .admin-bg-decor svg{width:100%;height:100%;filter:blur(46px);}
+  .blob{transform-origin:center;}
+  .blob-1{animation:floatA 24s ease-in-out infinite alternate;}
+  .blob-2{animation:floatB 28s ease-in-out infinite alternate;}
+  .blob-3{animation:floatA 32s ease-in-out infinite alternate-reverse;}
+  .blob-4{animation:floatB 26s ease-in-out infinite alternate-reverse;}
+  @keyframes floatA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(50px,36px) scale(1.1);}}
+  @keyframes floatB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-44px,30px) scale(0.93);}}
+  @media(prefers-reduced-motion:reduce){.blob-1,.blob-2,.blob-3,.blob-4{animation:none;}}
+
   /* Login screen */
-  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--paper);padding:20px;}
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:transparent;padding:20px;position:relative;z-index:1;}
   .login-card{width:100%;max-width:380px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:40px 36px;}
   .login-card .logo{display:block;text-align:center;margin-bottom:6px;}
   .login-card .sub{text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:30px;}
@@ -355,6 +368,12 @@
   .login-card label:first-of-type{margin-top:0;}
   .login-card input{width:100%;border:1px solid var(--border);border-radius:4px;padding:12px 14px;font-size:14.5px;}
   .login-card input:focus{border-color:var(--charcoal);}
+  .pw-field{position:relative;}
+  .pw-field input{padding-right:44px;}
+  .pw-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:none;background:none;
+    display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--muted);}
+  .pw-toggle:hover{background:rgba(0,0,0,.06);}
+  .pw-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;}
   .login-error{background:#fbeaea;border:1px solid #f0bcbc;color:#a33;font-size:13px;padding:10px 14px;border-radius:4px;margin-top:16px;display:none;}
   .login-card .btn{margin-top:24px;}
 
@@ -394,6 +413,16 @@
   .row-actions button{font-size:12.5px;padding:7px 12px;border-radius:4px;border:1px solid var(--border);background:var(--white);}
   .row-actions button:hover{border-color:var(--charcoal);}
   .row-actions button.danger:hover{border-color:#c94b4b;color:#c94b4b;}
+  .confirm-btn{font-size:12.5px;padding:7px 14px;border-radius:4px;border:1px solid #2a8f5a;background:#2a8f5a;color:#fff;font-weight:600;}
+  .confirm-btn:hover{background:#227a4a;border-color:#227a4a;}
+  .order-filters,.product-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .filter-chip{padding:8px 16px;border:1px solid var(--border);border-radius:20px;background:var(--white);font-size:13px;font-weight:500;color:var(--text);}
+  .filter-chip:hover{border-color:var(--charcoal);}
+  .filter-chip.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal);}
+  .dash-stat{position:relative;}
+  .dash-stat-view{position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;color:var(--cyan-deep);border:1px solid var(--border);
+    border-radius:12px;padding:4px 10px;background:var(--white);}
+  .dash-stat-view:hover{border-color:var(--cyan-deep);}
   .admin-empty{padding:60px 20px;text-align:center;color:var(--muted);}
 
   /* Slide-over form panel (mirrors cart drawer pattern) */
@@ -502,7 +531,17 @@
 
 
 </head>
-<body style="background:var(--paper);">
+<body>
+
+<!-- ============ ANIMATED BACKGROUND DECOR (shared) ============ -->
+<div class="admin-bg-decor" aria-hidden="true">
+  <svg viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
+    <circle class="blob blob-1" cx="120" cy="150" r="140" fill="#2f8fae" opacity="0.14"/>
+    <circle class="blob blob-2" cx="660" cy="120" r="105" fill="#c97b93" opacity="0.14"/>
+    <circle class="blob blob-3" cx="700" cy="650" r="165" fill="#2f8fae" opacity="0.11"/>
+    <circle class="blob blob-4" cx="110" cy="690" r="115" fill="#c97b93" opacity="0.12"/>
+  </svg>
+</div>
 
 <!-- ============ LOGIN SCREEN ============ -->
 <div class="login-screen" id="loginScreen">
@@ -513,7 +552,12 @@
       <label for="li-email">Email</label>
       <input type="email" id="li-email" autocomplete="username" required>
       <label for="li-password">Password</label>
-      <input type="password" id="li-password" autocomplete="current-password" required>
+      <div class="pw-field">
+        <input type="password" id="li-password" autocomplete="current-password" required>
+        <button type="button" class="pw-toggle" id="pwToggleBtn" aria-label="Show password">
+          <svg id="pwEyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
       <div class="login-error" id="loginError">Incorrect email or password.</div>
       <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Sign In</button>
     </form>
@@ -521,7 +565,7 @@
 </div>
 
 <!-- ============ DASHBOARD (shown only when signed in) ============ -->
-<div id="dashboardScreen" style="display:none;">
+<div id="dashboardScreen" style="display:none;position:relative;z-index:1;">
   <header class="admin-topbar">
     <div><span class="logo">Stock Avenue <span>Ghana</span></span><span class="admin-tag">Admin</span></div>
     <div class="admin-user">
@@ -583,6 +627,11 @@
 
       <div class="admin-stats" id="adminStats"></div>
 
+      <div class="product-filters" id="productFilters">
+        <button class="filter-chip active" data-stock="all">All Products</button>
+        <button class="filter-chip" data-stock="low">Low / Out of Stock</button>
+      </div>
+
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -608,6 +657,13 @@
     <div id="ordersTab" style="display:none;">
       <div class="admin-head">
         <h1>Orders</h1>
+      </div>
+      <div class="order-filters" id="orderFilters">
+        <button class="filter-chip active" data-status="all">All</button>
+        <button class="filter-chip" data-status="pending">Pending</button>
+        <button class="filter-chip" data-status="confirmed">Confirmed</button>
+        <button class="filter-chip" data-status="completed">Completed</button>
+        <button class="filter-chip" data-status="cancelled">Cancelled</button>
       </div>
       <div class="admin-table-wrap">
         <table class="admin-table">
@@ -812,7 +868,7 @@ const sb = (function(){
       insert(){ return Promise.resolve({ data: null, error: offlineError }); },
       update(){ return Promise.resolve({ data: null, error: offlineError }); },
       delete(){ return Promise.resolve({ data: null, error: offlineError }); }
-    }; 
+    };
     return {
       from(){ return offlineQuery; },
       auth: {
@@ -853,6 +909,17 @@ async function checkSession(){
     dashboardScreen.style.display = "none";
   }
 }
+document.getElementById("pwToggleBtn").addEventListener("click", ()=>{
+  const input = document.getElementById("li-password");
+  const btn = document.getElementById("pwToggleBtn");
+  const icon = document.getElementById("pwEyeIcon");
+  const showing = input.type === "text";
+  input.type = showing ? "password" : "text";
+  btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+  icon.innerHTML = showing
+    ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a13.2 13.2 0 0 1-3.17 3.86M6.1 6.1A13.6 13.6 0 0 0 1 11s4 7 11 7a9.26 9.26 0 0 0 4.9-1.36"/>';
+});
 document.getElementById("loginForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
   const btn = document.getElementById("loginBtn");
@@ -877,16 +944,15 @@ document.getElementById("logoutBtn").addEventListener("click", async ()=>{
 checkSession();
 
 /* ---------- Sidebar navigation ---------- */
+function switchTab(target){
+  document.querySelectorAll(".sidebar-link").forEach(l=>l.classList.toggle("active", l.dataset.tab===target));
+  document.getElementById("dashboardTab").style.display = target==="dashboard" ? "block" : "none";
+  document.getElementById("productsTab").style.display = target==="products" ? "block" : "none";
+  document.getElementById("ordersTab").style.display = target==="orders" ? "block" : "none";
+  document.getElementById("settingsTab").style.display = target==="settings" ? "block" : "none";
+}
 document.querySelectorAll(".sidebar-link").forEach(link=>{
-  link.addEventListener("click", ()=>{
-    document.querySelectorAll(".sidebar-link").forEach(l=>l.classList.remove("active"));
-    link.classList.add("active");
-    const target = link.dataset.tab;
-    document.getElementById("dashboardTab").style.display = target==="dashboard" ? "block" : "none";
-    document.getElementById("productsTab").style.display = target==="products" ? "block" : "none";
-    document.getElementById("ordersTab").style.display = target==="orders" ? "block" : "none";
-    document.getElementById("settingsTab").style.display = target==="settings" ? "block" : "none";
-  });
+  link.addEventListener("click", ()=> switchTab(link.dataset.tab));
 });
 
 /* ---------- Dashboard analytics ---------- */
@@ -909,9 +975,18 @@ function renderDashboard(){
 
   document.getElementById("dashStats").innerHTML = `
     <div class="dash-stat"><div class="lbl">Revenue (confirmed + completed)</div><div class="num">${revenueParts.length ? revenueParts.join(" + ") : "₵0.00"}</div></div>
-    <div class="dash-stat"><div class="lbl">Total Orders</div><div class="num">${adminOrders.length}</div></div>
-    <div class="dash-stat"><div class="lbl">Pending Orders</div><div class="num ${pendingCount>0?'alert':''}">${pendingCount}</div></div>
-    <div class="dash-stat"><div class="lbl">Low / Out of Stock</div><div class="num ${lowStockCount>0?'alert':''}">${lowStockCount}</div></div>
+    <div class="dash-stat">
+      <button class="dash-stat-view" onclick="switchTab('orders'); setOrderFilter('all');">View</button>
+      <div class="lbl">Total Orders</div><div class="num">${adminOrders.length}</div>
+    </div>
+    <div class="dash-stat">
+      ${pendingCount>0 ? `<button class="dash-stat-view" onclick="switchTab('orders'); setOrderFilter('pending');">View</button>` : ""}
+      <div class="lbl">Pending Orders</div><div class="num ${pendingCount>0?'alert':''}">${pendingCount}</div>
+    </div>
+    <div class="dash-stat">
+      ${lowStockCount>0 ? `<button class="dash-stat-view" onclick="switchTab('products'); setProductFilter('low');">View</button>` : ""}
+      <div class="lbl">Low / Out of Stock</div><div class="num ${lowStockCount>0?'alert':''}">${lowStockCount}</div>
+    </div>
   `;
 
   renderOrdersChart();
@@ -1079,17 +1154,25 @@ function renderStats(){
     <div class="stat-card"><div class="num">${onSale}</div><div class="lbl">On Sale</div></div>
   `;
 }
+let productStockFilter = "all";
 function renderTable(){
   const body = document.getElementById("adminTableBody");
   const empty = document.getElementById("adminEmpty");
+  const list = productStockFilter === "low" ? adminProducts.filter(p=>Number(p.stock_qty)<=LOW_STOCK_THRESHOLD) : adminProducts;
   if(adminProducts.length === 0){
     body.innerHTML = "";
     empty.style.display = "block";
     empty.textContent = 'No products yet — click "Add New Product" to create your first listing.';
     return;
   }
+  if(list.length === 0){
+    body.innerHTML = "";
+    empty.style.display = "block";
+    empty.textContent = "No low-stock or out-of-stock products right now.";
+    return;
+  }
   empty.style.display = "none";
-  body.innerHTML = adminProducts.map(p=>{
+  body.innerHTML = list.map(p=>{
     const stock = Number(p.stock_qty);
     const stockLabel = stock<=0 ? '<span class="status-pill cancelled">Out</span>' : (stock<=LOW_STOCK_THRESHOLD ? `<span class="status-pill pending">${stock} left</span>` : stock);
     const priceCell = (p.compare_at_price && Number(p.compare_at_price)>Number(p.price))
@@ -1134,16 +1217,21 @@ async function loadOrders(){
   badge.style.display = pending>0 ? "inline-block" : "none";
   renderOrders();
 }
+let orderStatusFilter = "all";
 function renderOrders(){
   const body = document.getElementById("ordersTableBody");
   const empty = document.getElementById("ordersEmpty");
-  if(adminOrders.length === 0){
+  const list = orderStatusFilter === "all" ? adminOrders : adminOrders.filter(o=>o.status===orderStatusFilter);
+  if(list.length === 0){
     body.innerHTML = "";
     empty.style.display = "block";
+    empty.textContent = adminOrders.length === 0
+      ? "No orders yet — orders placed through the storefront checkout will appear here."
+      : `No ${orderStatusFilter} orders.`;
     return;
   }
   empty.style.display = "none";
-  body.innerHTML = adminOrders.map(o=>{
+  body.innerHTML = list.map(o=>{
     const itemsText = (o.items||[]).map(i=>`${i.name} (${i.size}) ×${i.qty}`).join(", ");
     const totalParts = [];
     if(o.total_ghs) totalParts.push(`₵${Number(o.total_ghs).toFixed(2)}`);
@@ -1160,14 +1248,33 @@ function renderOrders(){
         </select>
       </td>
       <td style="font-size:12.5px;color:var(--muted);">${date}</td>
-      <td><div class="row-actions"><button class="danger" onclick="deleteOrder(${o.id})">Delete</button></div></td>
+      <td>
+        <div class="row-actions">
+          ${o.status==="pending" ? `<button class="confirm-btn" onclick="updateOrderStatus(${o.id}, 'confirmed')">Confirm</button>` : ""}
+          <button class="danger" onclick="deleteOrder(${o.id})">Delete</button>
+        </div>
+      </td>
     </tr>`;
   }).join("");
+}
+document.querySelectorAll("#orderFilters .filter-chip").forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    orderStatusFilter = chip.dataset.status;
+    document.querySelectorAll("#orderFilters .filter-chip").forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+    renderOrders();
+  });
+});
+function setOrderFilter(status){
+  orderStatusFilter = status;
+  document.querySelectorAll("#orderFilters .filter-chip").forEach(c=>c.classList.toggle("active", c.dataset.status===status));
+  renderOrders();
 }
 window.updateOrderStatus = async function(id, status){
   const { error } = await sb.from("orders").update({ status }).eq("id", id);
   if(error){ alert("Could not update order: " + error.message); return; }
-  loadOrders();
+  await loadOrders();
+  renderDashboard();
 };
 window.deleteOrder = async function(id){
   if(!confirm("Delete this order record? This cannot be undone.")) return;
@@ -1210,6 +1317,19 @@ document.getElementById("addProductBtn").addEventListener("click", ()=>{
   document.getElementById("formTitle").textContent = "Add New Product";
   openPanel();
 });
+document.querySelectorAll("#productFilters .filter-chip").forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    productStockFilter = chip.dataset.stock;
+    document.querySelectorAll("#productFilters .filter-chip").forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+    renderTable();
+  });
+});
+function setProductFilter(stock){
+  productStockFilter = stock;
+  document.querySelectorAll("#productFilters .filter-chip").forEach(c=>c.classList.toggle("active", c.dataset.stock===stock));
+  renderTable();
+}
 window.openEditProduct = function(id){
   const p = adminProducts.find(x=>x.id===id);
   if(!p) return;
